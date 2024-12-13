@@ -8,8 +8,8 @@ let isClear = true;
 let table = document.createElement('table');
 tableContainer.appendChild(table);
 
-const cellWidth = getComputedStyle(tableContainer).width.slice(0, 3) / 10;
-const cellHeight = getComputedStyle(tableContainer).height.slice(0, 3) / 10;
+const cellWidth = getComputedStyle(tableContainer).width.slice(0, 3) / 16;
+const cellHeight = getComputedStyle(tableContainer).height.slice(0, 3) / 16;
 
 
 function getRandomColor(colors) {
@@ -22,15 +22,14 @@ function random(length) {
     // return Math.floor(Math.random() * (length + 1));
 }
 
-for (let index = 0; index < 10; index++) {
+for (let index = 0; index < 16; index++) {
     const tr = document.createElement('tr');
     table.appendChild(tr)
 
-    for (let j = 0; j < 10; j++) {
+    for (let j = 0; j < 16; j++) {
         const td = document.createElement('td');
         td.setAttribute('id', 'flex-item');
-        td.style.setProperty('width', `${cellWidth}px`)
-        td.style.setProperty('height', `${cellHeight}px`)
+        td.setAttribute('style', `width:${cellWidth}px; height:${cellHeight}px;`)
         tr.append(td);
     }
 }
@@ -43,6 +42,8 @@ function createGrid(gridSize) {
         for (let j = 0; j < gridSize; j++) {
             const td = document.createElement('td');
             td.setAttribute('id', 'flex-item');
+            td.setAttribute('style', `width:${cellWidth}px;`)
+            td.setAttribute('style', `height:${cellHeight}px;`)
             // td.style.setProperty('width', `${cellWidth}px`)
             // td.style.setProperty('height', `${cellHeight}px`)
             tr.append(td);
@@ -51,16 +52,14 @@ function createGrid(gridSize) {
 }
 
 let c = 0;
-container.addEventListener("mouseover", function (e) {
+tableContainer.addEventListener("mouseover", function (e) {
     if (c == 0)
         isClear = false;
     const target = e.target;
-    const isStyleSet = target.style.getPropertyValue('background-color');
-    console.log(isStyleSet);
-
+    const isStyleSet = target.classList.contains('colourSet')
     c = 1;
     if (target.id == 'flex-item' && !isStyleSet) {
-        target.setAttribute('style', `background-color: ${getRandomColor(rainbowColors)};`);
+        target.style.setProperty('background-color', `${getRandomColor(rainbowColors)}`);
         target.setAttribute('class', `colourSet`);
     }
 });
@@ -83,7 +82,8 @@ grid.addEventListener('click', (e) => {
             if (!isClear) {
                 const allHighlighted = document.querySelectorAll('.colourSet');
                 allHighlighted.forEach(element => {
-                    element.removeAttribute('style');
+                    //element.removeAttribute('style');
+                    element.style.setProperty('background-color', '')
                 });
             }
             break;
