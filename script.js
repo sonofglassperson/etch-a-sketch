@@ -2,15 +2,14 @@
 const container = document.querySelector('.container')
 const grid = document.querySelector('.grid')
 const tableContainer = document.querySelector('.tableContainer')
-
 const rainbowColors = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'];
 let isClear = true;
 let table = document.createElement('table');
 tableContainer.appendChild(table);
 
-const cellWidth = getComputedStyle(tableContainer).width.slice(0, 3) / 16;
-const cellHeight = getComputedStyle(tableContainer).height.slice(0, 3) / 16;
-
+// For Default 16 x 16 grid
+let cellWidth = getComputedStyle(tableContainer).width.slice(0, 3);
+let cellHeight = getComputedStyle(tableContainer).height.slice(0, 3);
 
 function getRandomColor(colors) {
     return colors[random(colors.length)];
@@ -29,7 +28,7 @@ for (let index = 0; index < 16; index++) {
     for (let j = 0; j < 16; j++) {
         const td = document.createElement('td');
         td.setAttribute('id', 'flex-item');
-        td.setAttribute('style', `width:${cellWidth}px; height:${cellHeight}px;`)
+        td.setAttribute('style', `width:${cellWidth / 16}px; height:${cellHeight / 16}px;`)
         tr.append(td);
     }
 }
@@ -42,10 +41,7 @@ function createGrid(gridSize) {
         for (let j = 0; j < gridSize; j++) {
             const td = document.createElement('td');
             td.setAttribute('id', 'flex-item');
-            td.setAttribute('style', `width:${cellWidth}px;`)
-            td.setAttribute('style', `height:${cellHeight}px;`)
-            // td.style.setProperty('width', `${cellWidth}px`)
-            // td.style.setProperty('height', `${cellHeight}px`)
+            td.setAttribute('style', `width:${cellWidth / gridSize}px; height:${cellHeight / gridSize}px;`)
             tr.append(td);
         }
     }
@@ -53,11 +49,9 @@ function createGrid(gridSize) {
 
 let c = 0;
 tableContainer.addEventListener("mouseover", function (e) {
-    if (c == 0)
-        isClear = false;
+    isClear = false;
     const target = e.target;
     const isStyleSet = target.classList.contains('colourSet')
-    c = 1;
     if (target.id == 'flex-item' && !isStyleSet) {
         target.style.setProperty('background-color', `${getRandomColor(rainbowColors)}`);
         target.setAttribute('class', `colourSet`);
@@ -70,20 +64,22 @@ grid.addEventListener('click', (e) => {
     switch (e.target.id) {
         case "createGrid":
             const gridInput = document.getElementById('gridInput');
+            // Remove current table
             tableContainer.removeChild(table)
+            // Create new table
             table = document.createElement('table');
+            // Append it to the table container
             tableContainer.appendChild(table);
-            // let v = gridInput.value;
-            // console.log(v);
+            // Create grid
             createGrid(gridInput.value);
             break;
         case "clearGrid":
-            console.log('clear!');
             if (!isClear) {
                 const allHighlighted = document.querySelectorAll('.colourSet');
                 allHighlighted.forEach(element => {
-                    //element.removeAttribute('style');
-                    element.style.setProperty('background-color', '')
+                    element.style.removeProperty('background-color')
+                    //element.classList.remove('colourSet')
+                    element.removeAttribute('class')
                 });
             }
             break;
