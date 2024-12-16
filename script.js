@@ -64,14 +64,20 @@ grid.addEventListener('click', (e) => {
     switch (e.target.id) {
         case "createGrid":
             const gridInput = document.getElementById('gridInput');
-            // Remove current table
-            tableContainer.removeChild(table)
-            // Create new table
-            table = document.createElement('table');
-            // Append it to the table container
-            tableContainer.appendChild(table);
-            // Create grid
-            createGrid(gridInput.value);
+            const gridValue = +gridInput.value;
+            if (gridValue > 0 && gridValue <= 100 && Number.isInteger(gridValue)) {
+                // Remove current table
+                tableContainer.removeChild(table)
+                // Create new table
+                table = document.createElement('table');
+                // Append it to the table container
+                tableContainer.appendChild(table);
+                // Create grid
+                createGrid(gridValue);
+            } else {
+                alert('Please insert grid value.')
+            }
+
             break;
         case "clearGrid":
             if (!isClear) {
