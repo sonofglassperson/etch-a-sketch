@@ -74,6 +74,7 @@ grid.addEventListener('click', (e) => {
                 tableContainer.appendChild(table);
                 // Create grid
                 createGrid(gridValue);
+                gridInput.value = '';
             } else {
                 alert('Please insert grid value.')
             }
